@@ -1,15 +1,17 @@
-use std::{error::Error, fs};
-
-use crate::{cli::Args, counters::count_words};
+use crate::{
+    cli::{Args, get_content},
+    counters::count_words,
+};
+use std::error::Error;
 
 pub mod cli;
 mod counters;
 
 pub fn run(args: Args) -> Result<(), Box<dyn Error>> {
-    let contents = fs::read_to_string(&args.file)?;
-    let word_count = count_words(contents.as_str());
+    let content = get_content(args)?;
+    let word_count = count_words(&content.text);
 
-    println!("{} {}", word_count, args.file);
+    println!("{} {}", word_count, content.source);
 
     Ok(())
 }
