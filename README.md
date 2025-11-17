@@ -8,6 +8,7 @@ A Rust clone of the GNU Coreutils `wc` command
 - Measure maximum line length
 - Read from standard input and files
 - Read from multiple files at a time
+- Neatly printed output with `tabled`
 
 ## Installation
 
