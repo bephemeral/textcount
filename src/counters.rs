@@ -1,3 +1,3 @@
-pub fn count_words(content: &str) -> usize {
-    content.split_whitespace().count()
+pub fn count_words(text: &String) -> usize {
+    text.split_whitespace().count()
 }
