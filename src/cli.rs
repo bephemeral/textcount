@@ -48,25 +48,26 @@ pub struct Content {
 impl Content {
     fn get_record(&self, args: &Args) -> Vec<String> {
         let mut record = Vec::new();
+        let text = &self.text;
 
         if args.lines {
-            record.push(count_lines(&self.text).to_string());
+            record.push(count_lines(text).to_string());
         }
 
         if args.words {
-            record.push(count_words(&self.text).to_string());
+            record.push(count_words(text).to_string());
         }
 
         if args.chars {
-            record.push(count_chars(&self.text).to_string());
+            record.push(count_chars(text).to_string());
         }
 
         if args.bytes {
-            record.push(count_bytes(&self.text).to_string());
+            record.push(count_bytes(text).to_string());
         }
 
         if args.max_line_length {
-            record.push(get_max_line_length(&self.text).to_string());
+            record.push(get_max_line_length(text).to_string());
         }
 
         record.push(self.source.clone());
@@ -85,7 +86,7 @@ impl Content {
                 source: "total".to_string(),
                 text: content
                     .iter()
-                    .map(|c| c.text.clone())
+                    .map(|c| c.text.as_str())
                     .collect::<Vec<_>>()
                     .join(" "),
             };
