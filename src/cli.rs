@@ -10,7 +10,7 @@ use crate::counters::*;
 /// Print newline, word, and byte counts for each FILE, and a total line if
 /// more than one FILE is specified.  A word is a non-zero-length sequence of
 /// printable characters delimited by white space. {n}
-/// With no FILE, or when FILE is -, read standard input. {n}
+/// With no FILE, read standard input. {n}
 /// The options below may be used to select which counts are printed, always in
 /// the following order: newline, word, character, byte, maximum line length.
 #[derive(Parser, Debug)]
