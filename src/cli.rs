@@ -1,8 +1,11 @@
 use clap::Parser;
 use std::{fs::read_to_string, io};
 
+/// Print a word count for each FILE. A word is a non-zero-length
+/// sequence of printable characters delimited by white space. {n}
+/// With no FILE, read standard input.
 #[derive(Parser, Debug)]
-#[command(version = "0.1.0", about, long_about = None)]
+#[command(version = env!("CARGO_PKG_VERSION"), about, long_about = None, verbatim_doc_comment)]
 pub struct Args {
     #[arg()]
     pub file: Option<Vec<String>>,
