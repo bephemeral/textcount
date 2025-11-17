@@ -1,5 +1,9 @@
 use clap::Parser;
 use std::{fs::read_to_string, io};
+use tabled::{
+    builder::Builder,
+    settings::{Alignment, Style},
+};
 
 use crate::counters::*;
 
@@ -41,6 +45,60 @@ pub struct Content {
     pub text: String,
 }
 
+impl Content {
+    fn get_record(&self, args: &Args) -> Vec<String> {
+        let mut record = Vec::new();
+        let text = &self.text;
+
+        if args.lines {
+            record.push(count_lines(text).to_string());
+        }
+
+        if args.words {
+            record.push(count_words(text).to_string());
+        }
+
+        if args.chars {
+            record.push(count_chars(text).to_string());
+        }
+
+        if args.bytes {
+            record.push(count_bytes(text).to_string());
+        }
+
+        if args.max_line_length {
+            record.push(get_max_line_length(text).to_string());
+        }
+
+        record.push(self.source.clone());
+        record
+    }
+
+    pub fn bulk_display(args: &Args, content: Vec<Content>) {
+        let mut builder = Builder::default();
+
+        for (i, item) in content.iter().enumerate() {
+            builder.insert_record(i, item.get_record(args));
+        }
+
+        if content.len() > 1 {
+            let total = Content {
+                source: "total".to_string(),
+                text: content
+                    .iter()
+                    .map(|c| c.text.as_str())
+                    .collect::<Vec<_>>()
+                    .join(" "),
+            };
+            builder.insert_record(content.len(), total.get_record(args));
+        }
+
+        let mut table = builder.build();
+        table.with(Style::empty()).with(Alignment::right());
+        println!("{table}");
+    }
+}
+
 fn read_from_stdin() -> io::Result<Content> {
     Ok(Content {
         source: String::new(),
@@ -63,28 +121,4 @@ pub fn get_content(args: &Args) -> io::Result<Vec<Content>> {
     } else {
         Ok(vec![read_from_stdin()?])
     }
-}
-
-pub fn display_content(args: &Args, content: &Content) {
-    if args.lines {
-        print!("{} ", count_lines(&content.text));
-    }
-
-    if args.words {
-        print!("{} ", count_words(&content.text));
-    }
-
-    if args.chars {
-        print!("{} ", count_chars(&content.text));
-    }
-
-    if args.bytes {
-        print!("{} ", count_bytes(&content.text));
-    }
-
-    if args.max_line_length {
-        print!("{} ", get_max_line_length(&content.text));
-    }
-
-    println!("{}", content.source);
 }
