@@ -10,7 +10,7 @@ use crate::counters::*;
 /// The options below may be used to select which counts are printed, always in
 /// the following order: newline, word, character, byte, maximum line length.
 #[derive(Parser, Debug)]
-#[command(version = env!("CARGO_PKG_VERSION"), about, long_about = None, verbatim_doc_comment)]
+#[command(version = env!("CARGO_PKG_VERSION"), verbatim_doc_comment)]
 pub struct Args {
     #[arg()]
     pub file: Option<Vec<String>>,
