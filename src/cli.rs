@@ -1,5 +1,9 @@
 use clap::Parser;
 use std::{fs::read_to_string, io};
+use tabled::{
+    builder::Builder,
+    settings::{Alignment, Style},
+};
 
 use crate::counters::*;
 
@@ -42,28 +46,43 @@ pub struct Content {
 }
 
 impl Content {
-    pub fn display(&self, args: &Args) {
+    fn get_record(&self, args: &Args) -> Vec<String> {
+        let mut record = Vec::new();
+
         if args.lines {
-            print!("{} ", count_lines(&self.text));
+            record.push(count_lines(&self.text).to_string());
         }
 
         if args.words {
-            print!("{} ", count_words(&self.text));
+            record.push(count_words(&self.text).to_string());
         }
 
         if args.chars {
-            print!("{} ", count_chars(&self.text));
+            record.push(count_chars(&self.text).to_string());
         }
 
         if args.bytes {
-            print!("{} ", count_bytes(&self.text));
+            record.push(count_bytes(&self.text).to_string());
         }
 
         if args.max_line_length {
-            print!("{} ", get_max_line_length(&self.text));
+            record.push(get_max_line_length(&self.text).to_string());
         }
 
-        println!("{}", self.source);
+        record.push(self.source.clone());
+        record
+    }
+
+    pub fn bulk_display(args: &Args, content: Vec<Content>) {
+        let mut builder = Builder::default();
+
+        for (i, item) in content.iter().enumerate() {
+            builder.insert_record(i, item.get_record(args));
+        }
+
+        let mut table = builder.build();
+        table.with(Style::empty()).with(Alignment::right());
+        println!("{table}");
     }
 }
 

@@ -1,4 +1,4 @@
-use crate::cli::{Args, get_content};
+use crate::cli::{Args, Content, get_content};
 use std::error::Error;
 
 pub mod cli;
@@ -13,9 +13,7 @@ pub fn run(mut args: Args) -> Result<(), Box<dyn Error>> {
 
     let content = get_content(&args)?;
 
-    for item in content {
-        item.display(&args);
-    }
+    Content::bulk_display(&args, content);
 
     Ok(())
 }
