@@ -41,6 +41,32 @@ pub struct Content {
     pub text: String,
 }
 
+impl Content {
+    pub fn display(&self, args: &Args) {
+        if args.lines {
+            print!("{} ", count_lines(&self.text));
+        }
+
+        if args.words {
+            print!("{} ", count_words(&self.text));
+        }
+
+        if args.chars {
+            print!("{} ", count_chars(&self.text));
+        }
+
+        if args.bytes {
+            print!("{} ", count_bytes(&self.text));
+        }
+
+        if args.max_line_length {
+            print!("{} ", get_max_line_length(&self.text));
+        }
+
+        println!("{}", self.source);
+    }
+}
+
 fn read_from_stdin() -> io::Result<Content> {
     Ok(Content {
         source: String::new(),
@@ -63,28 +89,4 @@ pub fn get_content(args: &Args) -> io::Result<Vec<Content>> {
     } else {
         Ok(vec![read_from_stdin()?])
     }
-}
-
-pub fn display_content(args: &Args, content: &Content) {
-    if args.lines {
-        print!("{} ", count_lines(&content.text));
-    }
-
-    if args.words {
-        print!("{} ", count_words(&content.text));
-    }
-
-    if args.chars {
-        print!("{} ", count_chars(&content.text));
-    }
-
-    if args.bytes {
-        print!("{} ", count_bytes(&content.text));
-    }
-
-    if args.max_line_length {
-        print!("{} ", get_max_line_length(&content.text));
-    }
-
-    println!("{}", content.source);
 }
