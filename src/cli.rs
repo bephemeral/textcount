@@ -80,6 +80,18 @@ impl Content {
             builder.insert_record(i, item.get_record(args));
         }
 
+        if content.len() > 1 {
+            let total = Content {
+                source: "total".to_string(),
+                text: content
+                    .iter()
+                    .map(|c| c.text.clone())
+                    .collect::<Vec<_>>()
+                    .join(" "),
+            };
+            builder.insert_record(content.len(), total.get_record(args));
+        }
+
         let mut table = builder.build();
         table.with(Style::empty()).with(Alignment::right());
         println!("{table}");
